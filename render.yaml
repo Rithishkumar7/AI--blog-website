@@ -15,7 +15,7 @@ services:
         value: 10000
     plan: free
 
-  - type: web
+  - type: static_site
     name: blog-frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./build
