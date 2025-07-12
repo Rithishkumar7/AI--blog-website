@@ -1,4 +1,5 @@
 services:
+
   - type: web
     name: blog-backend
     runtime: node
@@ -14,10 +15,12 @@ services:
       - key: PORT
         value: 10000
     plan: free
+
   - type: web
     name: blog-frontend
+    runtime: node
     buildCommand: npm install && npm run build
-    startCommand: npx serve -s build -l 3000  # or another static server command
+    startCommand: npx serve -s build -l 3000
     envVars:
       - key: REACT_APP_API_URL
         value: https://blog-backend.onrender.com
