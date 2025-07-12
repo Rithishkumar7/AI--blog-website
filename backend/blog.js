@@ -17,11 +17,16 @@ app.use(bodyparser.json());
 const MONGODB_URI = process.env.MONGODB_URI;
 const EDEN_API_KEY = process.env.EDEN_API_KEY;
 
-mongoose.connect(MONGODB_URI, {
-  serverSelectionTimeoutMS: 5000
-})
-  .then(() => console.log("Connected to MongoDB"))
-  .catch(err => console.error("MongoDB connection error:", err));
+// Only connect to MongoDB if URI is provided
+if (MONGODB_URI) {
+  mongoose.connect(MONGODB_URI, {
+    serverSelectionTimeoutMS: 5000
+  })
+    .then(() => console.log("Connected to MongoDB"))
+    .catch(err => console.error("MongoDB connection error:", err));
+} else {
+  console.log("MONGODB_URI not provided, running without database");
+}
 
 const postSchema = new mongoose.Schema({
   name: String,
@@ -37,9 +42,13 @@ const Post = mongoose.model('Post', postSchema);
 // Get all posts
 app.get('/api/posts', async (req, res) => {
   try {
+    if (!MONGODB_URI) {
+      return res.json([]); // Return empty array if no database
+    }
     const posts = await Post.find().exec();
     res.json(posts);
   } catch (err) {
+    console.error("Error fetching posts:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -104,11 +113,18 @@ app.get('/api/health', (req, res) => {
 
 // Serve static files from React build
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../build')));
+  const buildPath = path.join(__dirname, '../build');
   
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../build', 'index.html'));
-  });
+  // Check if build directory exists
+  if (require('fs').existsSync(buildPath)) {
+    app.use(express.static(buildPath));
+    
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(buildPath, 'index.html'));
+    });
+  } else {
+    console.log("Build directory not found, serving API only");
+  }
 }
 
 const PORT = process.env.PORT || 5000;
