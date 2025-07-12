@@ -6,10 +6,28 @@ const Home = () => {
 
   useEffect(() => {
     const apiUrl = process.env.REACT_APP_API_URL || '';
-    fetch(`${apiUrl}/api/posts`)
-      .then((res) => res.json())
-      .then((data) => setPosts(data))
-      .catch((err) => console.error("Failed to fetch posts:", err));
+    console.log('API URL:', apiUrl); // Debug log
+    
+    fetch(`${apiUrl}/api/posts`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log('Posts data:', data); // Debug log
+        setPosts(data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch posts:", err);
+        console.error("API URL used:", apiUrl);
+      });
   }, []);
 
   return (

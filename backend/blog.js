@@ -8,7 +8,10 @@ const cors = require('cors');
 const path = require('path');
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['https://blog-frontend-lnvm.onrender.com', 'http://localhost:3000'],
+  credentials: true
+}));
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 const MONGODB_URI = process.env.MONGODB_URI;

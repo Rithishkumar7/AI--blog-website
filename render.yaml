@@ -23,4 +23,4 @@ services:
     staticPublishPath: ./build
     envVars:
       - key: REACT_APP_API_URL
-        value: https://blog-backend.onrender.com 
+        value: https://blog-backend-lnvm.onrender.com 
