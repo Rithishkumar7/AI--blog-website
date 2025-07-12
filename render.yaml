@@ -1,5 +1,4 @@
 services:
-  # Backend API service
   - type: web
     name: blog-backend
     runtime: node
@@ -16,11 +15,11 @@ services:
         value: 10000
     plan: free
 
-  # Frontend React app
-  - type: static
+  - type: web
     name: blog-frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./build
     envVars:
       - key: REACT_APP_API_URL
-        value: https://blog-backend.onrender.com 
+        value: https://blog-backend.onrender.com
+    plan: free
