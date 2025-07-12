@@ -1,0 +1,26 @@
+services:
+  # Backend API service
+  - type: web
+    name: blog-backend
+    runtime: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node blog.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: EDEN_API_KEY
+        sync: false
+      - key: PORT
+        value: 10000
+
+  # Frontend React app
+  - type: web
+    name: blog-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://blog-backend.onrender.com 

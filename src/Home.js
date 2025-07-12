@@ -5,7 +5,8 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch("/api/posts")
+    const apiUrl = process.env.REACT_APP_API_URL || '';
+    fetch(`${apiUrl}/api/posts`)
       .then((res) => res.json())
       .then((data) => setPosts(data))
       .catch((err) => console.error("Failed to fetch posts:", err));
@@ -16,7 +17,7 @@ const Home = () => {
       <div className="content">
         <div className="container">
           {/* Blog Title */}
-          <h1 style={{ textAlign: "center", marginTop: 32, marginBottom: 16 }}>BLOG WEBSITE</h1>
+          <h1 style={{ textAlign: "center", marginTop: 32, marginBottom: 16 }}>AI BLOG WEBSITE </h1>
           {/* Welcome Paragraph */}
           <p style={{ textAlign: "center", fontSize: "1.15em", marginBottom: 40 }}>
             Welcome to our blog! Discover stories, tutorials, and insights from developers, writers, and creators. Stay updated with the latest posts and ideas that matter.
