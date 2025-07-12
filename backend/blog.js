@@ -113,7 +113,8 @@ app.post('/api/ai-generate', async (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
+  console.log('Health check called');
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 // Root route
