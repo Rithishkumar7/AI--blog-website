@@ -14,10 +14,10 @@ services:
       - key: PORT
         value: 10000
     plan: free
-  - type: static_site   # <-- This is not recognized by Render
+  - type: web
     name: blog-frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: ./build
+    startCommand: npx serve -s build -l 3000  # or another static server command
     envVars:
       - key: REACT_APP_API_URL
         value: https://blog-backend.onrender.com
