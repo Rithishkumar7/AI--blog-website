@@ -5,7 +5,7 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const apiUrl = process.env.REACT_APP_API_URL || '';
+    const apiUrl = process.env.REACT_APP_API_URL || 'https://blog-backend-da3s.onrender.com';
     console.log('API URL:', apiUrl); // Debug log
     
     // Test if the backend is reachable
