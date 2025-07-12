@@ -9,11 +9,7 @@ const path = require('path');
 
 // Middleware
 app.use(cors({
-  origin: [
-    'https://blog-frontend-lnvm.onrender.com', 
-    'https://blog-frontend.onrender.com',
-    'http://localhost:3000'
-  ],
+  origin: true, // Allow all origins for now
   credentials: true
 }));
 app.use(bodyparser.urlencoded({ extended: true }));
@@ -45,11 +41,16 @@ const Post = mongoose.model('Post', postSchema);
 
 // Get all posts
 app.get('/api/posts', async (req, res) => {
+  console.log('GET /api/posts called');
+  console.log('Origin:', req.headers.origin);
+  
   try {
     if (!MONGODB_URI) {
+      console.log('No MONGODB_URI, returning empty array');
       return res.json([]); // Return empty array if no database
     }
     const posts = await Post.find().exec();
+    console.log('Found posts:', posts.length);
     res.json(posts);
   } catch (err) {
     console.error("Error fetching posts:", err);
