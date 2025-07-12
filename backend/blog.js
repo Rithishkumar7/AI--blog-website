@@ -9,7 +9,11 @@ const path = require('path');
 
 // Middleware
 app.use(cors({
-  origin: ['https://blog-frontend-lnvm.onrender.com', 'http://localhost:3000'],
+  origin: [
+    'https://blog-frontend-lnvm.onrender.com', 
+    'https://blog-frontend.onrender.com',
+    'http://localhost:3000'
+  ],
   credentials: true
 }));
 app.use(bodyparser.urlencoded({ extended: true }));
