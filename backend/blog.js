@@ -80,6 +80,20 @@ app.post('/api/posts', async (req, res) => {
   }
 });
 
+// Delete a post
+app.delete('/api/posts/:postId', async (req, res) => {
+  try {
+    const post = await Post.findByIdAndDelete(req.params.postId).exec();
+    if (post) {
+      res.json({ message: "Post deleted successfully", deletedPost: post });
+    } else {
+      res.status(404).json({ error: "Post not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete post" });
+  }
+});
+
 // AI generate (already suitable, just update route)
 app.post('/api/ai-generate', async (req, res) => {
   const topic = req.body.topic;
@@ -126,6 +140,7 @@ app.get('/', (req, res) => {
       posts: '/api/posts',
       singlePost: '/api/posts/:id',
       createPost: '/api/posts (POST)',
+      deletePost: '/api/posts/:id (DELETE)',
       aiGenerate: '/api/ai-generate (POST)'
     }
   });
