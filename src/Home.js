@@ -43,6 +43,8 @@ const Home = () => {
       })
       .then((data) => {
         console.log('Posts data:', data); // Debug log
+        console.log('Posts length:', data.length);
+        console.log('Setting posts state with:', data);
         setPosts(data);
       })
       .catch((err) => {
@@ -63,6 +65,7 @@ const Home = () => {
           </p>
           {/* Posts Section */}
           <div className="blog-container">
+            <p>Debug: Posts length is {posts.length}</p>
             {posts.length === 0 ? (
               <p>No posts found.</p>
             ) : (
