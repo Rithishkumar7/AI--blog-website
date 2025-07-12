@@ -111,6 +111,20 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Blog API is running!',
+    endpoints: {
+      health: '/api/health',
+      posts: '/api/posts',
+      singlePost: '/api/posts/:id',
+      createPost: '/api/posts (POST)',
+      aiGenerate: '/api/ai-generate (POST)'
+    }
+  });
+});
+
 // Serve static files from React build
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(__dirname, '../build');
