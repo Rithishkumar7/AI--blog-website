@@ -8,13 +8,33 @@ const Home = () => {
     const apiUrl = process.env.REACT_APP_API_URL || '';
     console.log('API URL:', apiUrl); // Debug log
     
-    fetch(`${apiUrl}/api/posts`, {
+    // Test if the backend is reachable
+    fetch(`${apiUrl}/api/health`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     })
       .then((res) => {
+        console.log('Health check response:', res.status);
+        if (!res.ok) {
+          throw new Error(`Health check failed! status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((healthData) => {
+        console.log('Health check data:', healthData);
+        
+        // Now fetch posts
+        return fetch(`${apiUrl}/api/posts`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      })
+      .then((res) => {
+        console.log('Posts response status:', res.status);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
