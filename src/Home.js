@@ -4,8 +4,13 @@ function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const apiUrl =
+    process.env.NODE_ENV === 'production'
+      ? 'https://blog-backend-da3s.onrender.com' 
+      : '';
+
   useEffect(() => {
-    fetch('/api/posts')
+    fetch(`${apiUrl}/api/posts`)
       .then(res => res.json())
       .then(data => {
         setPosts(data);
