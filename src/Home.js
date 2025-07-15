@@ -1,85 +1,46 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
 
-const Home = () => {
+function Home() {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Force use the correct backend URL
-    const apiUrl = 'https://blog-backend-da3s.onrender.com';
-    console.log('API URL:', apiUrl); // Debug log
-    
-    // Test if the backend is reachable
-    fetch(`${apiUrl}/api/health`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        console.log('Health check response:', res.status);
-        if (!res.ok) {
-          throw new Error(`Health check failed! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((healthData) => {
-        console.log('Health check data:', healthData);
-        
-        // Now fetch posts
-        return fetch(`${apiUrl}/api/posts`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      })
-      .then((res) => {
-        console.log('Posts response status:', res.status);
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log('Posts data:', data); // Debug log
-        console.log('Posts length:', data.length);
-        console.log('Setting posts state with:', data);
+    fetch('/api/posts')
+      .then(res => res.json())
+      .then(data => {
         setPosts(data);
+        setLoading(false);
       })
-      .catch((err) => {
-        console.error("Failed to fetch posts:", err);
-        console.error("API URL used:", apiUrl);
+      .catch(err => {
+        console.error('Failed to fetch posts:', err);
+        setLoading(false);
       });
   }, []);
+
+  if (loading) return <div>Loading posts...</div>;
 
   return (
     <div className="wrapper">
       <div className="content">
         <div className="container">
-          {/* Blog Title */}
-          <h1 style={{ textAlign: "center", marginTop: 32, marginBottom: 16 }}>AI BLOG WEBSITE </h1>
-          {/* Welcome Paragraph */}
+          <h1 style={{ textAlign: "center", marginTop: 32, marginBottom: 16 }}>AI BLOG WEBSITE</h1>
           <p style={{ textAlign: "center", fontSize: "1.15em", marginBottom: 40 }}>
-            Welcome to our blog! Discover stories, tutorials, and insights from developers, writers, and creators. Stay updated with the latest posts and ideas that matter.
+            Welcome to our blog! Discover stories, tutorials, and insights from developers, writers, and creators.
           </p>
-          {/* Posts Section */}
           <div className="blog-container">
-            <p>Debug: Posts length is {posts.length}</p>
             {posts.length === 0 ? (
               <p>No posts found.</p>
             ) : (
               <div>
-                <p>Debug: Found {posts.length} posts, rendering them now...</p>
                 {posts.map((post) => (
                   <div className="card" key={post._id}>
                     <div className="card-header">
                       <h2>{post.name}</h2>
                     </div>
                     <div className="card-body" style={{ position: "relative" }}>
-                      <p style={{ 
-                        wordWrap: "break-word", 
-                        overflowWrap: "break-word", 
+                      <p style={{
+                        wordWrap: "break-word",
+                        overflowWrap: "break-word",
                         hyphens: "auto",
                         overflow: "hidden",
                         maxHeight: "4.5em",
@@ -91,11 +52,6 @@ const Home = () => {
                       <span className="category-tag" data-category={post.category}>
                         {post.category}
                       </span>
-                      <div style={{ marginTop: "10px" }}>
-                        <Link to={`/posts/${post._id}`} className="read-more-link">
-                          Read More
-                        </Link>
-                      </div>
                     </div>
                   </div>
                 ))}
@@ -106,6 +62,6 @@ const Home = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Home;
