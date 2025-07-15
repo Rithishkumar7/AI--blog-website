@@ -6,7 +6,7 @@ function Home() {
 
   const apiUrl =
     process.env.NODE_ENV === 'production'
-      ? 'https://blog-backend-da3s.onrender.com' 
+      ? 'https://blog-backend-da3s.onrender.com'
       : '';
 
   useEffect(() => {
